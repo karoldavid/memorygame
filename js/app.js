@@ -1,3 +1,32 @@
+var model = {};
+
+model.symboles = ["", "", "", "", "", "", "", ""];
+
+model.makeCards = function() {
+	var cards = [];
+	var number = this.size * this.size;
+	for (var i = 0; i < number; i++) {
+		cards.push({
+			type: "heart",
+			hidden: true,
+		});
+	}
+	return cards;
+};
+
+model.init = function(size) {
+	this.size = size;
+	this.cards = this.makeCards();
+};
+
+var controller = {};
+
+controller.init = function(size) {
+	model.init(size);
+	memoryGame.init(model.size);
+};
+
+
 var memoryGame = {};
 
 memoryGame.init = function(size) {
@@ -33,4 +62,4 @@ memoryGame.render = function() {
 
 };
 
-memoryGame.init(4);
+controller.init(4);
