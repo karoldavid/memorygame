@@ -14,8 +14,8 @@ model.makeCards = function() {
 	return cards;
 };
 
-model.init = function(size) {
-	this.size = size;
+model.init = function() {
+	this.size = 4;
 	this.cards = this.makeCards();
 };
 
@@ -32,7 +32,8 @@ var memoryGame = {};
 memoryGame.init = function(size) {
 	this.$board = $('#memoryGame');
 	this.rowElem = '<div class="row">';
-	this.tileElem = '<div class="card blue rounded-corners"></div>';
+	// this.tileElem = '<div class="card blue rounded-corners"></div>';
+	this.tileElem = '<div class="col s2"><div class="card-panel teal"></div></div>';
 	this.size = size;
 
 	this.render();
@@ -62,4 +63,4 @@ memoryGame.render = function() {
 
 };
 
-controller.init(4);
+controller.init();
