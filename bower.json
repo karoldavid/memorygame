@@ -1,0 +1,21 @@
+{
+  "name": "memorygame",
+  "homepage": "https://github.com/karoldavid/memorygame",
+  "authors": [
+    "karoldavid <k.zysk@zoho.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jQuery": "^3.1.1",
+    "materialize": "^0.98.0"
+  }
+}
