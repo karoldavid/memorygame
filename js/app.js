@@ -1,13 +1,27 @@
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min)) + min;
+}
+
 var model = {};
 
-model.symboles = ["", "", "", "", "", "", "", ""];
+model.symboles = ["android", "star", "call", "radio", "vpn_key", "work", "https", "videocam"];
 
 model.makeCards = function() {
 	var cards = [];
 	var number = this.size * this.size;
+	var allCardTypes = [];
+	model.symboles.forEach(function(symbol) {
+		allCardTypes.push(symbol, symbol);
+	});
+
 	for (var i = 0; i < number; i++) {
+		var index = getRandomInt(0, allCardTypes.length);
+		var type = allCardTypes.splice(index, 1)[0];
+
 		cards.push({
-			type: "heart",
+			type: type,
 			hidden: true,
 		});
 	}
