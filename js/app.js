@@ -26,14 +26,13 @@ controller.init = function(size) {
 	memoryGame.init(model.size);
 };
 
-
 var memoryGame = {};
 
 memoryGame.init = function(size) {
 	this.$board = $('#memoryGame');
 	this.rowElem = '<div class="row">';
 	// this.tileElem = '<div class="card blue rounded-corners"></div>';
-	this.tileElem = '<div class="col s2"><div class="card-panel teal"></div></div>';
+	this.tileElem = '<div class="col s2"><div class="card-panel teal valign-wrapper"><i class="material-icons valign">add</i></div></div>';
 	this.size = size;
 
 	this.render();
