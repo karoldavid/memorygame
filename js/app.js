@@ -121,6 +121,7 @@ memoryGame.showCard = function(cardIndex) {
 		this.$cardElem = $('#' + cardIndex + " .material-icons:first");
 		this.$cardElem.text(card.type);
 		controller.setCardToVisible(cardIndex);
+		controller.isCardSelected() ? controller.setSelected(null) : controller.setSelected(card);
 
 	} else if (show && card.type != controller.getSelected().type){
 		var card2Index = controller.getSelected().id;
@@ -133,12 +134,13 @@ memoryGame.showCard = function(cardIndex) {
 
 		self.$cardElem.text(card.type);
 
+		controller.setSelected(null);
+
 		setTimeout(function() {
 			self.$cardElem.text('add');
 			self.$card2Elem.text('add');
 		}, 250);
 	}
-	controller.isCardSelected() ? controller.setSelected(null) : controller.setSelected(card);
 };
 
 memoryGame.makeRow = function(rowIndex){
