@@ -23,6 +23,7 @@ model.makeCards = function() {
 		cards.push({
 			type: type,
 			hidden: true,
+			id: i
 		});
 	}
 	return cards;
@@ -30,6 +31,7 @@ model.makeCards = function() {
 
 model.init = function() {
 	this.size = 4;
+	this.selectedCard = null;
 	this.cards = this.makeCards();
 };
 
@@ -44,13 +46,39 @@ controller.getCardStatus = function(cardIndex){
 	return model.cards[cardIndex].hidden;
 };
 
+controller.checkPair = function(cardIndex) {
+	var type = model.cards[cardIndex].type;
+	var pair = model.cards.filter(function(card) {
+		return card.type === type;
+	});
+	return pair[0].hidden || pair[1].hidden ? true : false;
+};
+
 controller.setCardToVisible = function (cardIndex) {
 	model.cards[cardIndex].hidden = false;
 };
 
-controller.getCard= function(cardIndex) {
+controller.setCardToHidden = function (cardIndex) {
+	model.cards[cardIndex].hidden = true;
+};
+
+controller.getCard = function(cardIndex) {
 	return model.cards[cardIndex];
 };
+
+controller.setSelected = function (card) {
+	model.selectedCard = card;
+};
+
+controller.getSelected = function(card) {
+	return model.selectedCard;
+};
+
+controller.isCardSelected = function() {
+	return model.selectedCard != null;
+};
+
+
 
 var memoryGame = {};
 
@@ -73,11 +101,24 @@ memoryGame.showCard = function(cardIndex) {
 	var show = controller.getCardStatus(cardIndex);
 	var card = controller.getCard(cardIndex);
 	console.log(show);
-	if (show) {;
+	if ((show && !controller.isCardSelected()) || (show && card.type === controller.getSelected().type))  {
+
 		this.$cardElem = $('#' + cardIndex + " .material-icons:first");
 		this.$cardElem.text(card.type);
 		controller.setCardToVisible(cardIndex);
+
+	} else if (show && card.type != controller.getSelected().type){
+		this.$cardElem = $('#' + cardIndex + " .material-icons:first");
+		this.$cardElem.text('add');
+		controller.setCardToHidden(cardIndex);
+
+		var card2Index = controller.getSelected().id;
+		this.$cardElem = $('#' + card2Index + " .material-icons:first");
+		this.$cardElem.text('add');
+
+		controller.setCardToHidden(card2Index);
 	}
+	controller.isCardSelected() ? controller.setSelected(null) : controller.setSelected(card);
 };
 
 memoryGame.makeRow = function(rowIndex){
