@@ -79,6 +79,10 @@ controller.isCardSelected = function() {
 	return model.selectedCard != null;
 };
 
+controller.resetGame = function() {
+	model.makeCards();
+};
+
 var memoryGame = {};
 
 memoryGame.init = function(size) {
@@ -87,12 +91,23 @@ memoryGame.init = function(size) {
 	this.rowElem = '<div class="row">';
 	// this.tileElem = '<div class="card blue rounded-corners"></div>';
 	this.tileElem = '<div class="col s2"><div id="#" class="card-panel teal valign-wrapper"><i class="material-icons valign">add</i></div></div>';
+	this.buttonElem = '<a id="reset" class="waves-effect waves-light btn"><i class="material-icons left"></i>RESET</a>';
 	this.size = size;
+	this.numberOfCards = size * size;
 	this.renderBoard();
+	this.renderButton();
 	this.$cardElem = $('.card-panel');
 	this.$cardElem.click(function(event) {
 		var cardIndex = event.target.id || $(event.target).parent()[0].id;
 		self.showCard(cardIndex);
+	});
+	this.$resetButton = $('#reset');
+	this.$resetButton.click(function() {
+		controller.resetGame();
+		for (var i = 0; i < self.numberOfCards; i++) {
+			self.$cardElem = $('#' + i + " .material-icons:first");
+			self.$cardElem.text('add');
+		}
 	});
 };
 
@@ -145,6 +160,10 @@ memoryGame.renderBoard = function(){
 	for(var i = 0; i < this.size; i++) {
 		this.$board.append(this.makeRow(i));
 	}
+};
+
+memoryGame.renderButton = function() {
+	this.$board.append(this.buttonElem);
 };
 
 controller.init();
