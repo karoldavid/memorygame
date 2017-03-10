@@ -6,6 +6,8 @@ function getRandomInt(min, max) {
 
 var model = {};
 
+model.count = 0;
+
 model.symboles = ["android", "star", "call", "radio", "vpn_key", "work", "https", "videocam"];
 
 model.makeCards = function() {
@@ -83,6 +85,15 @@ controller.resetGame = function() {
 	model.makeCards();
 };
 
+controller.writeTimer = function() {
+	model.count++;
+	memoryGame.updateTimer(model.count);
+    clearInterval(controller.writeTimer);
+}
+
+controller.counter = setInterval(controller.writeTimer, 1000);
+
+
 var memoryGame = {};
 
 memoryGame.init = function(size) {
@@ -93,12 +104,12 @@ memoryGame.init = function(size) {
 
 	this.$board = $('#memoryGame');
 	this.rowElem = '<div class="row">';
-	this.tileElem = '<div class="col s2"><div id="#" class="card-panel teal valign-wrapper"><i class="material-icons valign">add</i></div></div>';
-	this.buttonElem = '<div class="col s2"><a id="reset" class="waves-effect waves-light btn"><i class="material-icons left"></i>RESET</a></div>';
+	this.tileElem = '<div class="col s3"><div id="#" class="card-panel teal valign-wrapper"><i class="material-icons valign">add</i></div></div>';
+	this.buttonElem = '<div class="col s3"><a id="reset" class="waves-effect waves-light btn"><i class="material-icons left"></i>RESET</a></div>';
 	this.utilitiesElem = '<div id="utilities" class="row"></div>';
-	this.timerElem = '<div class="col s2"><p id="timer">00</p></div>';
-	this.moveCounterElem = '<div class="col s2"><p id="moveCounter">0</p></div>';
-	this.starRatingElem = '<div id="starRatingElem" class="col s2"><i class="material-icons valign">star</i><i id="starRatingElem" class="material-icons valign">star</i><i id="starRatingElem" class="material-icons valign">star</i></div>';
+	this.timerElem = '<div class="col s3"><p>Time <span id="timer">00</span></p></div>';
+	this.moveCounterElem = '<div class="col s3"><p>Moves <span id="moveCounter">0</span></p></div>';
+	this.starRatingElem = '<div id="starRatingElem" class="col s3"><i class="material-icons valign">star</i><i id="starRatingElem" class="material-icons valign">star</i><i id="starRatingElem" class="material-icons valign">star</i></div>';
 
 	this.renderBoard();
 	this.renderUtilities();
@@ -193,6 +204,11 @@ memoryGame.renderMoveCounter = function() {
 
 memoryGame.renderStarRating = function() {
 	this.$gameUtilities.append(this.starRatingElem);
+	this.$counter = $('#timer');
+};
+
+memoryGame.updateTimer = function(counter) {
+	this.$counter.text(counter);
 };
 
 controller.init();
