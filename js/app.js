@@ -40,9 +40,22 @@ controller.init = function(size) {
 	memoryGame.init(model.size);
 };
 
+controller.getCardStatus = function(cardIndex){
+	return model.cards[cardIndex].hidden;
+};
+
+controller.setCardToVisible = function (cardIndex) {
+	model.cards[cardIndex].hidden = false;
+};
+
+controller.getCard= function(cardIndex) {
+	return model.cards[cardIndex];
+};
+
 var memoryGame = {};
 
 memoryGame.init = function(size) {
+	var self = this;
 	this.$board = $('#memoryGame');
 	this.rowElem = '<div class="row">';
 	// this.tileElem = '<div class="card blue rounded-corners"></div>';
@@ -51,10 +64,20 @@ memoryGame.init = function(size) {
 	this.render();
 	this.$cardElem = $('.card-panel');
 	this.$cardElem.click(function(event) {
-		var cardIndex;
-		cardIndex = event.target.id || $(event.target).parent()[0].id;
-		console.log(cardIndex);
+		var cardIndex = event.target.id || $(event.target).parent()[0].id;
+		self.showCard(cardIndex);
 	});
+};
+
+memoryGame.showCard = function(cardIndex) {
+	var show = controller.getCardStatus(cardIndex);
+	var card = controller.getCard(cardIndex);
+	console.log(show);
+	if (show) {;
+		this.$cardElem = $('#' + cardIndex + " .material-icons:first");
+		this.$cardElem.text(card.type);
+		controller.setCardToVisible(cardIndex);
+	}
 };
 
 memoryGame.makeRow = function(rowIndex){
