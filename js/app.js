@@ -83,6 +83,8 @@ controller.isCardSelected = function() {
 
 controller.resetGame = function() {
 	model.makeCards();
+	model.count = 0;
+	memoryGame.updateTimer(model.count);
 };
 
 controller.writeTimer = function() {
