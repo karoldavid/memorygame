@@ -87,7 +87,8 @@ controller.resetGame = function() {
 	model.makeCards();
 	model.seconds = 0;
 	memoryGame.updateTimer(model.seconds);
-	model.clickCount = 0;
+	model.moveCount = 0;
+	memoryGame.updateMoveCounter(model.moveCount);
 };
 
 controller.writeTimer = function() {
