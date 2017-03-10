@@ -8,7 +8,7 @@ var model = {};
 
 model.seconds = 0;
 
-model.clickCount = 0; 
+model.moveCount = 0; 
 
 model.symboles = ["android", "star", "call", "radio", "vpn_key", "work", "https", "videocam"];
 
@@ -91,12 +91,16 @@ controller.resetGame = function() {
 };
 
 controller.writeTimer = function() {
-	model.seconds++;
-	memoryGame.updateTimer(model.seconds);
+	memoryGame.updateTimer(model.seconds++);
     clearInterval(controller.writeTimer);
 }
 
 controller.counter = setInterval(controller.writeTimer, 1000);
+
+controller.writeMoveCounter = function() {
+	model.moveCount++;
+	memoryGame.updateMoveCounter(model.moveCount);
+};
 
 
 var memoryGame = {};
@@ -144,6 +148,7 @@ memoryGame.showCard = function(cardIndex) {
 		this.$cardElem.text(card.type);
 		controller.setCardToVisible(cardIndex);
 		controller.isCardSelected() ? controller.setSelected(null) : controller.setSelected(card);
+		controller.writeMoveCounter();
 
 	} else if (show && card.type != controller.getSelected().type){
 		var card2Index = controller.getSelected().id;
@@ -157,6 +162,7 @@ memoryGame.showCard = function(cardIndex) {
 		self.$cardElem.text(card.type);
 
 		controller.setSelected(null);
+		controller.writeMoveCounter();
 
 		setTimeout(function() {
 			self.$cardElem.text('add');
@@ -206,6 +212,7 @@ memoryGame.renderTimer = function() {
 
 memoryGame.renderMoveCounter = function() {
 	this.$gameUtilities.append(this.moveCounterElem);
+	this.$moveCounter = $('#moveCounter');
 };
 
 memoryGame.renderStarRating = function() {
@@ -216,8 +223,8 @@ memoryGame.updateTimer = function(seconds) {
 	this.$timer.text(seconds);
 };
 
-memoryGame.updateClickCounter = function(counter) {
-	this.$counter.text(counter);
+memoryGame.updateMoveCounter = function(moveCount) {
+	this.$moveCounter.text(moveCount);
 };
 
 controller.init();
