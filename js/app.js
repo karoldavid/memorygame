@@ -87,15 +87,21 @@ var memoryGame = {};
 
 memoryGame.init = function(size) {
 	var self = this;
-	this.$board = $('#memoryGame');
-	this.rowElem = '<div class="row">';
-	// this.tileElem = '<div class="card blue rounded-corners"></div>';
-	this.tileElem = '<div class="col s2"><div id="#" class="card-panel teal valign-wrapper"><i class="material-icons valign">add</i></div></div>';
-	this.buttonElem = '<a id="reset" class="waves-effect waves-light btn"><i class="material-icons left"></i>RESET</a>';
+
 	this.size = size;
 	this.numberOfCards = size * size;
+
+	this.$board = $('#memoryGame');
+	this.rowElem = '<div class="row">';
+	this.tileElem = '<div class="col s2"><div id="#" class="card-panel teal valign-wrapper"><i class="material-icons valign">add</i></div></div>';
+	this.buttonElem = '<div class="col s2"><a id="reset" class="waves-effect waves-light btn"><i class="material-icons left"></i>RESET</a></div>';
+	this.utilitiesElem = '<div id="utilities" class="row"></div>';
+	this.timerElem = '<div class="col s2"><p id="timer">00</p></div>';
+	this.moveCounterElem = '<div class="col s2"><p id="moveCounter">0</p></div>';
+	this.starRatingElem = '<div id="starRatingElem" class="col s2"><i class="material-icons valign">star</i><i id="starRatingElem" class="material-icons valign">star</i><i id="starRatingElem" class="material-icons valign">star</i></div>';
+
 	this.renderBoard();
-	this.renderButton();
+	this.renderUtilities();
 	this.$cardElem = $('.card-panel');
 	this.$cardElem.click(function(event) {
 		var cardIndex = event.target.id || $(event.target).parent()[0].id;
@@ -164,8 +170,29 @@ memoryGame.renderBoard = function(){
 	}
 };
 
+memoryGame.renderUtilities = function() {
+	this.$board.append(this.utilitiesElem);
+	this.$gameUtilities = $('#utilities');
+	this.renderButton();
+	this.renderTimer();
+	this.renderMoveCounter();
+	this.renderStarRating();
+};
+
 memoryGame.renderButton = function() {
-	this.$board.append(this.buttonElem);
+	this.$gameUtilities.append(this.buttonElem);
+};
+
+memoryGame.renderTimer = function() {
+	this.$gameUtilities.append(this.timerElem);
+}
+
+memoryGame.renderMoveCounter = function() {
+	this.$gameUtilities.append(this.moveCounterElem);
+};
+
+memoryGame.renderStarRating = function() {
+	this.$gameUtilities.append(this.starRatingElem);
 };
 
 controller.init();
