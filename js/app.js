@@ -46,18 +46,25 @@ memoryGame.init = function(size) {
 	this.$board = $('#memoryGame');
 	this.rowElem = '<div class="row">';
 	// this.tileElem = '<div class="card blue rounded-corners"></div>';
-	this.tileElem = '<div class="col s2"><div class="card-panel teal valign-wrapper"><i class="material-icons valign">add</i></div></div>';
+	this.tileElem = '<div class="col s2"><div id="#" class="card-panel teal valign-wrapper"><i class="material-icons valign">add</i></div></div>';
 	this.size = size;
-
 	this.render();
+	this.$cardElem = $('.card-panel');
+	this.$cardElem.click(function(event) {
+		var cardIndex;
+		cardIndex = event.target.id || $(event.target).parent()[0].id;
+		console.log(cardIndex);
+	});
 };
 
-memoryGame.makeRow = function(){
+memoryGame.makeRow = function(rowIndex){
 	var row = this.rowElem;
 	var tile = this.tileElem;
+	var id;
 
 	for (var i = 0; i < this.size; i++) {
-		row += tile;
+		id = rowIndex * this.size + i;
+		row += tile.replace('#', id);
 	}
 
 	row += '</div>';
@@ -67,13 +74,12 @@ memoryGame.makeRow = function(){
 
 memoryGame.buildBoard = function(){
 	for(var i = 0; i < this.size; i++) {
-		this.$board.append(this.makeRow());
+		this.$board.append(this.makeRow(i));
 	}
 };
 
 memoryGame.render = function() {
 	this.buildBoard();
-
 };
 
 controller.init();
