@@ -6,7 +6,9 @@ function getRandomInt(min, max) {
 
 var model = {};
 
-model.count = 0;
+model.seconds = 0;
+
+model.clickCount = 0; 
 
 model.symboles = ["android", "star", "call", "radio", "vpn_key", "work", "https", "videocam"];
 
@@ -83,13 +85,14 @@ controller.isCardSelected = function() {
 
 controller.resetGame = function() {
 	model.makeCards();
-	model.count = 0;
-	memoryGame.updateTimer(model.count);
+	model.seconds = 0;
+	memoryGame.updateTimer(model.seconds);
+	model.clickCount = 0;
 };
 
 controller.writeTimer = function() {
-	model.count++;
-	memoryGame.updateTimer(model.count);
+	model.seconds++;
+	memoryGame.updateTimer(model.seconds);
     clearInterval(controller.writeTimer);
 }
 
@@ -198,7 +201,8 @@ memoryGame.renderButton = function() {
 
 memoryGame.renderTimer = function() {
 	this.$gameUtilities.append(this.timerElem);
-}
+	this.$timer = $('#timer');
+};
 
 memoryGame.renderMoveCounter = function() {
 	this.$gameUtilities.append(this.moveCounterElem);
@@ -206,10 +210,13 @@ memoryGame.renderMoveCounter = function() {
 
 memoryGame.renderStarRating = function() {
 	this.$gameUtilities.append(this.starRatingElem);
-	this.$counter = $('#timer');
 };
 
-memoryGame.updateTimer = function(counter) {
+memoryGame.updateTimer = function(seconds) {
+	this.$timer.text(seconds);
+};
+
+memoryGame.updateClickCounter = function(counter) {
 	this.$counter.text(counter);
 };
 
