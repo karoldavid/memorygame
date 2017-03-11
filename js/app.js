@@ -8,7 +8,10 @@ var model = {};
 
 model.seconds = 0;
 
-model.moveCount = 0; 
+model.moveCount = 0;
+
+model.starRatingRemove = [10,14];
+model.stars = 3;
 
 model.symboles = ["android", "star", "call", "radio", "vpn_key", "work", "https", "videocam"];
 
@@ -83,14 +86,6 @@ controller.isCardSelected = function() {
 	return model.selectedCard != null;
 };
 
-controller.resetGame = function() {
-	model.makeCards();
-	model.seconds = 0;
-	memoryGame.updateTimer(model.seconds);
-	model.moveCount = 0;
-	memoryGame.updateMoveCounter(model.moveCount);
-};
-
 controller.writeTimer = function() {
 	memoryGame.updateTimer(model.seconds++);
     clearInterval(controller.writeTimer);
@@ -103,6 +98,26 @@ controller.writeMoveCounter = function() {
 	memoryGame.updateMoveCounter(model.moveCount);
 };
 
+controller.writeStarRating = function() {
+	var number = model.starRatingRemove.length -1;
+	
+	model.starRatingRemove.forEach(function(remove, i) {
+		if (model.moveCount >= remove) {
+			memoryGame.updateStarRating("", number - i);
+		}
+	});
+};
+
+controller.resetGame = function() {
+	model.makeCards();
+	model.seconds = 0;
+	memoryGame.updateTimer(model.seconds);
+	model.moveCount = 0;
+	memoryGame.updateMoveCounter(model.moveCount);
+	for (var i = 0; i < model.stars; i++) {
+		memoryGame.updateStarRating("star", i);
+	}
+};
 
 var memoryGame = {};
 
@@ -114,12 +129,12 @@ memoryGame.init = function(size) {
 
 	this.$board = $('#memoryGame');
 	this.rowElem = '<div class="row">';
-	this.tileElem = '<div class="col s3"><div id="#" class="card-panel teal valign-wrapper"><i class="material-icons valign">add</i></div></div>';
-	this.buttonElem = '<div class="col s3"><a id="reset" class="waves-effect waves-light btn"><i class="material-icons left"></i>RESET</a></div>';
+	this.tileElem = '<div class="col s3"><div id="#" class="card-panel teal valign-wrapper"><i class="material-icons blue-text text-lighten-2 valign">add</i></div></div>';
+	this.buttonElem = '<div class="col s6 l3"><a id="reset" class="waves-effect waves-light btn"><i class="material-icons left"></i>RESET</a></div>';
 	this.utilitiesElem = '<div id="utilities" class="row"></div>';
-	this.timerElem = '<div class="col s3"><p>Time <span id="timer">00</span></p></div>';
-	this.moveCounterElem = '<div class="col s3"><p>Moves <span id="moveCounter">0</span></p></div>';
-	this.starRatingElem = '<div id="starRatingElem" class="col s3"><i class="material-icons valign">star</i><i id="starRatingElem" class="material-icons valign">star</i><i id="starRatingElem" class="material-icons valign">star</i></div>';
+	this.timerElem = '<div class="col s6 l3"><p>Time <span id="timer">00</span></p></div>';
+	this.moveCounterElem = '<div class="col s6 l3"><p>Moves <span id="moveCounter">0</span></p></div>';
+	this.starRatingElem = '<div id="starRating" class="col s6 l3"><i class="material-icons star valign">star</i><i class="material-icons star valign">star</i><i class="material-icons star valign">star</i></div>';
 
 	this.renderBoard();
 	this.renderUtilities();
@@ -150,6 +165,7 @@ memoryGame.showCard = function(cardIndex) {
 		controller.setCardToVisible(cardIndex);
 		controller.isCardSelected() ? controller.setSelected(null) : controller.setSelected(card);
 		controller.writeMoveCounter();
+		controller.writeStarRating();
 
 	} else if (show && card.type != controller.getSelected().type){
 		var card2Index = controller.getSelected().id;
@@ -164,6 +180,7 @@ memoryGame.showCard = function(cardIndex) {
 
 		controller.setSelected(null);
 		controller.writeMoveCounter();
+		controller.writeStarRating();
 
 		setTimeout(function() {
 			self.$cardElem.text('add');
@@ -218,6 +235,7 @@ memoryGame.renderMoveCounter = function() {
 
 memoryGame.renderStarRating = function() {
 	this.$gameUtilities.append(this.starRatingElem);
+	this.$starRating = $('#starRating .star');
 };
 
 memoryGame.updateTimer = function(seconds) {
@@ -226,6 +244,10 @@ memoryGame.updateTimer = function(seconds) {
 
 memoryGame.updateMoveCounter = function(moveCount) {
 	this.$moveCounter.text(moveCount);
+};
+
+memoryGame.updateStarRating = function(text, index) {
+    this.$starRating.get(index).innerHTML = text;
 };
 
 controller.init();
