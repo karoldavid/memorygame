@@ -117,7 +117,9 @@ controller.writeMoveCounter = function() {
 controller.writeStarRating = function() {
 	var number = model.starRatingRemove.length -1;
 
-	model.playerStars--;
+	if (model.finalStars > 1) {
+		model.finalStars--;
+	}
 	
 	model.starRatingRemove.forEach(function(remove, i) {
 		if (model.moveCount >= remove) {
