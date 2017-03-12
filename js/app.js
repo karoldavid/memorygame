@@ -13,6 +13,8 @@ model.moveCount = 0;
 model.starRatingRemove = [10,14];
 model.stars = 3;
 
+model.win = false;
+
 model.symboles = ["android", "star", "call", "radio", "vpn_key", "work", "https", "videocam"];
 
 model.makeCards = function() {
@@ -30,7 +32,7 @@ model.makeCards = function() {
 
 		cards.push({
 			type: type,
-			hidden: true,
+			hidden: false,
 			id: i
 		});
 	}
@@ -68,7 +70,9 @@ controller.checkWin = function() {
 	});
 
 	if (solved.length === model.cards.length) {
+		model.win = true;
 		memoryGame.showModalWin();
+		//controller.resetGame();
 	}
 };
 
@@ -97,8 +101,10 @@ controller.isCardSelected = function() {
 };
 
 controller.writeTimer = function() {
-	memoryGame.updateTimer(model.seconds++);
-    clearInterval(controller.writeTimer);
+	if (!model.win) {
+		memoryGame.updateTimer(model.seconds++);
+    	clearInterval(controller.writeTimer);
+	}
 }
 
 controller.counter = setInterval(controller.writeTimer, 1000);
@@ -123,6 +129,7 @@ controller.resetGame = function() {
 	model.seconds = 0;
 	memoryGame.updateTimer(model.seconds);
 	model.moveCount = 0;
+	model.win = false;
 	memoryGame.updateMoveCounter(model.moveCount);
 	for (var i = 0; i < model.stars; i++) {
 		memoryGame.updateStarRating("star", i);
@@ -263,7 +270,11 @@ memoryGame.updateStarRating = function(text, index) {
 };
 
 memoryGame.showModalWin = function() {
-	 $('#modal1').modal().modal('open');
+	$('#modalWin').modal().modal('open');
+
+	$("#modalClose").click(function(){
+	    controller.resetGame();
+	});
 };
 
 controller.init();
