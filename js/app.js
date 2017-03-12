@@ -133,6 +133,38 @@
       }
     });
   };
+
+  // The game controller's showCard method flips a card by calling the view's showCard method.
+  // If the second card matches the first card, it flips the second card as well.
+  // Otherwise, it calls the view's hideTwoCards method which shows the second card for a
+  // brief moment before hiding both cards.
+  controller.showCard = function(cardIndex) {
+    var show = controller.getCardStatus(cardIndex);
+    var card = controller.getCard(cardIndex);
+
+    if ((show && !controller.isCardSelected()) || (show && card.type === controller.getSelected().type)) {
+
+      memoryGame.showCard(cardIndex, card.type);
+      controller.setCardToVisible(cardIndex);
+      
+      controller.isCardSelected() ? controller.setSelected(null) : controller.setSelected(card);
+      controller.writeMoveCounter();
+      controller.writeStarRating();
+      controller.checkWin();
+
+    } else if (show && card.type != controller.getSelected().type) {
+      var card2Index = controller.getSelected().id;
+      var card2 = controller.getCard(card2Index);
+      controller.setCardToHidden(cardIndex);
+      controller.setCardToHidden(card2Index);
+
+      memoryGame.hideTwoCards(cardIndex, card2Index, card.type);
+
+      controller.setSelected(null);
+      controller.writeMoveCounter();
+      controller.writeStarRating();
+    }
+  };
   
   // The game controller's resetGame method invokes the
   // model.init method to reset the game data
@@ -184,7 +216,7 @@
     // Invoke the showCard method with the card id an flip the card
     this.$cardElem.click(function(event) {
       var cardIndex = event.target.id || $(event.target).parent()[0].id;
-      self.showCard(cardIndex);
+      controller.showCard(cardIndex);
     });
 
     this.$resetButton = $('#reset');
@@ -195,41 +227,26 @@
   };
 
   // The showCard method checks if a card can be flipped
-  memoryGame.showCard = function(cardIndex) {
-    var self = this;
-    var show = controller.getCardStatus(cardIndex);
-    var card = controller.getCard(cardIndex);
+  memoryGame.showCard = function(cardIndex, cardType) {
+    this.$cardElem = $('#' + cardIndex + " .material-icons:first");
+    this.$cardElem.text(cardType);
+  };
 
-    if ((show && !controller.isCardSelected()) || (show && card.type === controller.getSelected().type)) {
+  memoryGame.hideCard = function(cardType) {
+    this.$cardElem = $('#' + cardIndex + " .material-icons:first");
+    this.$cardElem.text(cardType);
+  };
 
-      this.$cardElem = $('#' + cardIndex + " .material-icons:first");
-      this.$cardElem.text(card.type);
-      controller.setCardToVisible(cardIndex);
-      controller.isCardSelected() ? controller.setSelected(null) : controller.setSelected(card);
-      controller.writeMoveCounter();
-      controller.writeStarRating();
-      controller.checkWin();
-
-    } else if (show && card.type != controller.getSelected().type) {
-      var card2Index = controller.getSelected().id;
-      var card2 = controller.getCard(card2Index);
-      controller.setCardToHidden(cardIndex);
-      controller.setCardToHidden(card2Index);
-
+  memoryGame.hideTwoCards = function(cardIndex, card2Index, cardType) {
       self.$cardElem = $('#' + cardIndex + " .material-icons:first");
       self.$card2Elem = $('#' + card2Index + " .material-icons:first");
 
-      self.$cardElem.text(card.type);
-
-      controller.setSelected(null);
-      controller.writeMoveCounter();
-      controller.writeStarRating();
+      self.$cardElem.text(cardType);
 
       setTimeout(function() {
         self.$cardElem.text('add');
         self.$card2Elem.text('add');
       }, 250);
-    }
   };
 
   // The hideCards method hides all the cards to reset the game
