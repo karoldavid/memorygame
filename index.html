@@ -14,12 +14,29 @@
 	<div class="container">
 		<div id="memoryGame"></div>
 	</div>
+
+ 	<div id="modalWin" class="modal">
+    	<div class="modal-content">
+     		<h4>Congratulations</h4>
+    		<p>You win!</p>
+    	</div>
+   	 	<div class="modal-footer">
+    		<a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">continue</a>
+    	</div>
+  	</div>
 	
 	<!-- bower:js -->
 	<script src="bower_components/jquery/dist/jquery.js"></script>
 	<script src="bower_components/materialize/bin/materialize.js"></script>
 	<!-- endbower -->
 	<script src="js/app.js"></script>
+
+	<script>
+		$(document).ready(function() {
+    		$('#modal1').modal();
+		});
+
+	</script>
 
 </body>
 </html>

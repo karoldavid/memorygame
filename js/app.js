@@ -62,6 +62,16 @@ controller.checkPair = function(cardIndex) {
 	return pair[0].hidden || pair[1].hidden ? true : false;
 };
 
+controller.checkWin = function() {
+	var solved = model.cards.filter(function(card) {
+		return !card.hidden;
+	});
+
+	if (solved.length === model.cards.length) {
+		memoryGame.showModalWin();
+	}
+};
+
 controller.setCardToVisible = function (cardIndex) {
 	model.cards[cardIndex].hidden = false;
 };
@@ -187,6 +197,8 @@ memoryGame.showCard = function(cardIndex) {
 			self.$card2Elem.text('add');
 		}, 250);
 	}
+
+	controller.checkWin();
 };
 
 memoryGame.makeRow = function(rowIndex){
@@ -248,6 +260,10 @@ memoryGame.updateMoveCounter = function(moveCount) {
 
 memoryGame.updateStarRating = function(text, index) {
     this.$starRating.get(index).innerHTML = text;
+};
+
+memoryGame.showModalWin = function() {
+	 $('#modal1').modal().modal('open');
 };
 
 controller.init();
