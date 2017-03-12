@@ -1,12 +1,14 @@
 (function() {
   "use strict";
 
+  // Utility function used to generate random cards
   function getRandomInt(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min)) + min;
   }
 
+  // The game model holds the card game data  
   var model = {};
 
   model.init = function() {
@@ -22,6 +24,7 @@
     this.cards = this.makeCards();
   };
 
+  // The makeCards method generates an Array of 16 card objects with symbols in a random order
   model.makeCards = function() {
     var cards = [];
     var number = this.size * this.size;
@@ -44,6 +47,7 @@
     return cards;
   };
 
+  // The game controller 
   var controller = {};
 
   controller.init = function(size) {
@@ -63,6 +67,10 @@
     return pair[0].hidden || pair[1].hidden ? true : false;
   };
 
+  // The game controller's checkWin method checks if all the hidden
+  // properties of the model.cards Array's card objects are set to
+  // 'false'. If they are all set to false, the view's showModalWin
+  // method is invoked to congratulate and inform the user
   controller.checkWin = function() {
     var solved = model.cards.filter(function(card) {
       return !card.hidden;
@@ -125,7 +133,10 @@
       }
     });
   };
-
+  
+  // The game controller's resetGame method invokes the
+  // model.init method to reset the game data
+  // and to reset the view as well
   controller.resetGame = function() {
 
     model.init();
@@ -139,8 +150,12 @@
     }
   };
 
+
+  // The game view
   var memoryGame = {};
 
+  // The game view's init method is invoked by the game controller on initial page load,
+  // defines the DOM elements, and renders the game board and the features
   memoryGame.init = function(size) {
     var self = this;
 
@@ -164,6 +179,9 @@
 
     this.$cardElem = $('.card-panel');
 
+    // Attach a click event handler to each card
+    // Identify the card
+    // Invoke the showCard method with the card id an flip the card
     this.$cardElem.click(function(event) {
       var cardIndex = event.target.id || $(event.target).parent()[0].id;
       self.showCard(cardIndex);
@@ -176,6 +194,7 @@
     });
   };
 
+  // The showCard method checks if a card can be flipped
   memoryGame.showCard = function(cardIndex) {
     var self = this;
     var show = controller.getCardStatus(cardIndex);
@@ -213,6 +232,7 @@
     }
   };
 
+  // The hideCards method hides all the cards to reset the game
   memoryGame.hideCards = function() {
     for (var i = 0; i < this.numberOfCards; i++) {
       this.$cardElem = $('#' + i + " .material-icons:first");
@@ -220,6 +240,8 @@
     }
   };
 
+  // The makeRow method is called by the renderBoard method and renders a row
+  // and adds an id to each tile
   memoryGame.makeRow = function(rowIndex) {
     var row = this.rowElem;
     var tile = this.tileElem;
@@ -234,13 +256,16 @@
 
     return row;
   }
-
+  
+  // The renderBoard method is called on initial page load and renders the game board
   memoryGame.renderBoard = function() {
     for (var i = 0; i < this.size; i++) {
       this.$board.append(this.makeRow(i));
     }
   };
 
+  // The renderUtilities method is called on initial page load
+  // and renders the game's extra feautures
   memoryGame.renderUtilities = function() {
     this.$board.append(this.utilitiesElem);
     this.$gameUtilities = $('#utilities');
@@ -281,6 +306,9 @@
     this.$starRating.get(index).innerHTML = text;
   };
 
+  // A modal opens to let the user know that he has won the game
+  // and when the user clicks the "New Game" button or outside the modal
+  // the game controller's resetGame method is invoked to restart the game
   memoryGame.showModalWin = function(seconds, stars, maxStars) {
 
     this.$timeNeeded.text(seconds);
