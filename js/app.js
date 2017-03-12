@@ -6,17 +6,18 @@ function getRandomInt(min, max) {
 
 var model = {};
 
-model.seconds = 0;
-
-model.moveCount = 0;
-
-model.starRatingRemove = [10,14];
-model.stars = 3;
-model.finalStars = model.stars;
-
-model.win = false;
-
-model.symboles = ["android", "star", "call", "radio", "vpn_key", "work", "https", "videocam"];
+model.init = function() {
+	this.size = 4;
+	this.selectedCard = null;
+	this.seconds = 0;
+	this.moveCount = 0;
+	this.starRatingRemove = [10,14];
+	this.stars = 3;
+	this.finalStars = model.stars;
+	this.win = false;
+	this.symboles = ["android", "star", "call", "radio", "vpn_key", "work", "https", "videocam"];
+	this.cards = this.makeCards();
+};
 
 model.makeCards = function() {
 	var cards = [];
@@ -38,12 +39,6 @@ model.makeCards = function() {
 		});
 	}
 	return cards;
-};
-
-model.init = function() {
-	this.size = 4;
-	this.selectedCard = null;
-	this.cards = this.makeCards();
 };
 
 var controller = {};
@@ -129,13 +124,13 @@ controller.writeStarRating = function() {
 };
 
 controller.resetGame = function() {
-	model.makeCards();
-	model.seconds = 0;
+
+	model.init();
+	
+	memoryGame.hideCards();
 	memoryGame.updateTimer(model.seconds);
-	model.moveCount = 0;
-	model.win = false;
-	model.finalStars = model.stars;
 	memoryGame.updateMoveCounter(model.moveCount);
+
 	for (var i = 0; i < model.stars; i++) {
 		memoryGame.updateStarRating("star", i);
 	}
@@ -175,10 +170,6 @@ memoryGame.init = function(size) {
 	
 	this.$resetButton.click(function() {
 		controller.resetGame();
-		for (var i = 0; i < self.numberOfCards; i++) {
-			self.$cardElem = $('#' + i + " .material-icons:first");
-			self.$cardElem.text('add');
-		}
 	});
 };
 
@@ -195,6 +186,7 @@ memoryGame.showCard = function(cardIndex) {
 		controller.isCardSelected() ? controller.setSelected(null) : controller.setSelected(card);
 		controller.writeMoveCounter();
 		controller.writeStarRating();
+		controller.checkWin();
 
 	} else if (show && card.type != controller.getSelected().type){
 		var card2Index = controller.getSelected().id;
@@ -216,8 +208,13 @@ memoryGame.showCard = function(cardIndex) {
 			self.$card2Elem.text('add');
 		}, 250);
 	}
+};
 
-	controller.checkWin();
+memoryGame.hideCards = function() {
+	for (var i = 0; i < this.numberOfCards; i++) {
+		this.$cardElem = $('#' + i + " .material-icons:first");
+		this.$cardElem.text('add');
+	}
 };
 
 memoryGame.makeRow = function(rowIndex){
