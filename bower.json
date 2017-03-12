@@ -16,7 +16,6 @@
   ],
   "dependencies": {
     "jQuery": "^3.1.1",
-    "materialize": "^0.98.0",
-    "material-design-icons": "^3.0.1"
+    "materialize": "^0.98.0"
   }
 }
