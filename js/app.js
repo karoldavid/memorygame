@@ -286,11 +286,18 @@ memoryGame.showModalWin = function(seconds, stars, maxStars) {
 	this.$timeNeeded.text(seconds);
 	this.$finalStars.text(stars + "/" + maxStars);
 
-	$('#modalWin').modal().modal('open');
-
-	$("#modalClose").click(function(){
-	    controller.resetGame();
-	});
+	$('#modalWin').modal({
+      dismissible: true, // Modal can be dismissed by clicking outside of the modal
+      opacity: .5, // Opacity of modal background
+      inDuration: 300, // Transition in duration
+      outDuration: 200, // Transition out duration
+      startingTop: '4%', // Starting top style attribute
+      endingTop: '10%', // Ending top style attribute
+      complete: function() { 
+      	controller.resetGame();
+       }
+    }
+  ).modal('open');
 };
 
 controller.init();
