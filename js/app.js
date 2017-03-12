@@ -70,7 +70,7 @@
   // The game controller's checkWin method checks if all the hidden
   // properties of the model.cards Array's card objects are set to
   // 'false'. If they are all set to false, the view's showModalWin
-  // method is invoked to congratulate and inform the user
+  // method is invoked to congratulate and inform the user.
   controller.checkWin = function() {
     var solved = model.cards.filter(function(card) {
       return !card.hidden;
@@ -167,7 +167,7 @@
     this.$finalStars = $('#finalStars');
 
     this.rowElem = '<div class="row">';
-    this.tileElem = '<div class="col s3"><div id="#" class="card-panel teal valign-wrapper"><i class="material-icons blue-text text-lighten-2 valign">add</i></div></div>';
+    this.tileElem = '<div class="col s3"><div id="#" class="card-panel teal valign-wrapper"><i class="material-icons md-36 blue-text text-lighten-2 valign">add</i></div></div>';
     this.buttonElem = '<div class="col s6 l3"><a id="reset" class="waves-effect waves-light btn"><i class="material-icons left"></i>RESET</a></div>';
     this.utilitiesElem = '<div id="utilities" class="row"></div>';
     this.timerElem = '<div class="col s6 l3"><p>Time <span id="timer">00</span></p></div>';
