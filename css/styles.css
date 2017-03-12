@@ -11,3 +11,7 @@ html {
 	margin: 0 auto;
 }
 
+.metrics {
+	display: inline-block;
+}
+

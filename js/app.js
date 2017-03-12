@@ -12,6 +12,7 @@ model.moveCount = 0;
 
 model.starRatingRemove = [10,14];
 model.stars = 3;
+model.finalStars = model.stars;
 
 model.win = false;
 
@@ -32,7 +33,7 @@ model.makeCards = function() {
 
 		cards.push({
 			type: type,
-			hidden: false,
+			hidden: true,
 			id: i
 		});
 	}
@@ -71,8 +72,7 @@ controller.checkWin = function() {
 
 	if (solved.length === model.cards.length) {
 		model.win = true;
-		memoryGame.showModalWin();
-		//controller.resetGame();
+		memoryGame.showModalWin(model.seconds, model.finalStars, model.stars);
 	}
 };
 
@@ -116,6 +116,8 @@ controller.writeMoveCounter = function() {
 
 controller.writeStarRating = function() {
 	var number = model.starRatingRemove.length -1;
+
+	model.playerStars--;
 	
 	model.starRatingRemove.forEach(function(remove, i) {
 		if (model.moveCount >= remove) {
@@ -130,6 +132,7 @@ controller.resetGame = function() {
 	memoryGame.updateTimer(model.seconds);
 	model.moveCount = 0;
 	model.win = false;
+	model.finalStars = model.stars;
 	memoryGame.updateMoveCounter(model.moveCount);
 	for (var i = 0; i < model.stars; i++) {
 		memoryGame.updateStarRating("star", i);
@@ -145,6 +148,9 @@ memoryGame.init = function(size) {
 	this.numberOfCards = size * size;
 
 	this.$board = $('#memoryGame');
+	this.$timeNeeded = $('#timeNeeded');
+	this.$finalStars = $('#finalStars');
+
 	this.rowElem = '<div class="row">';
 	this.tileElem = '<div class="col s3"><div id="#" class="card-panel teal valign-wrapper"><i class="material-icons blue-text text-lighten-2 valign">add</i></div></div>';
 	this.buttonElem = '<div class="col s6 l3"><a id="reset" class="waves-effect waves-light btn"><i class="material-icons left"></i>RESET</a></div>';
@@ -155,12 +161,16 @@ memoryGame.init = function(size) {
 
 	this.renderBoard();
 	this.renderUtilities();
+
 	this.$cardElem = $('.card-panel');
+	
 	this.$cardElem.click(function(event) {
 		var cardIndex = event.target.id || $(event.target).parent()[0].id;
 		self.showCard(cardIndex);
 	});
+	
 	this.$resetButton = $('#reset');
+	
 	this.$resetButton.click(function() {
 		controller.resetGame();
 		for (var i = 0; i < self.numberOfCards; i++) {
@@ -269,7 +279,11 @@ memoryGame.updateStarRating = function(text, index) {
     this.$starRating.get(index).innerHTML = text;
 };
 
-memoryGame.showModalWin = function() {
+memoryGame.showModalWin = function(seconds, stars, maxStars) {
+
+	this.$timeNeeded.text(seconds);
+	this.$finalStars.text(stars + "/" + maxStars);
+
 	$('#modalWin').modal().modal('open');
 
 	$("#modalClose").click(function(){
