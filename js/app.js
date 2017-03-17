@@ -182,7 +182,6 @@
     }
   };
 
-
   // The game view
   var memoryGame = {};
 
@@ -194,17 +193,17 @@
     this.size = size;
     this.numberOfCards = size * size;
 
-    this.$board = $('#memoryGame');
+    this.$board = $('#board');
+    this.$gameUtilities = $('#utilities');
     this.$timeNeeded = $('#timeNeeded');
     this.$finalStars = $('#finalStars');
 
     this.rowElem = '<div class="row">';
-    this.tileElem = '<div class="col s3"><div id="#" class="card-panel teal valign-wrapper"><i class="material-icons md-36 blue-text text-lighten-2 valign">add</i></div></div>';
-    this.buttonElem = '<div class="col s6 l3"><a id="reset" class="waves-effect waves-light btn"><i class="material-icons left"></i>RESET</a></div>';
-    this.utilitiesElem = '<div id="utilities" class="row"></div>';
-    this.timerElem = '<div class="col s6 l3"><p>Time <span id="timer">00</span></p></div>';
-    this.moveCounterElem = '<div class="col s6 l3"><p>Moves <span id="moveCounter">0</span></p></div>';
-    this.starRatingElem = '<div id="starRating" class="col s6 l3"><i class="material-icons star valign">star</i><i class="material-icons star valign">star</i><i class="material-icons star valign">star</i></div>';
+    this.tileElem = '<div id="#" class="card-panel teal valign-wrapper"><i class="material-icons md-36 blue-text text-lighten-2 valign">add</i></div>';
+    this.buttonElem = '<a id="reset" class="waves-effect waves-light btn utilities"><i class="material-icons left"></i>RESET</a>';
+    this.timerElem = '<p class="utilities">Time <span id="timer">00</span></p>';
+    this.moveCounterElem = '<p class="utilities">Moves <span id="moveCounter">0</span></p>';
+    this.starRatingElem = '<div id="starRating" class="utilities"><i class="material-icons star valign">star</i><i class="material-icons star valign">star</i><i class="material-icons star valign">star</i></div>';
 
     this.renderBoard();
     this.renderUtilities();
@@ -260,7 +259,7 @@
   // The makeRow method is called by the renderBoard method and renders a row
   // and adds an id to each tile
   memoryGame.makeRow = function(rowIndex) {
-    var row = this.rowElem;
+    var row = '<div class="line">';
     var tile = this.tileElem;
     var id;
 
@@ -269,9 +268,7 @@
       row += tile.replace('#', id);
     }
 
-    row += '</div>';
-
-    return row;
+    return row + '</div>';
   }
   
   // The renderBoard method is called on initial page load and renders the game board
@@ -284,8 +281,6 @@
   // The renderUtilities method is called on initial page load
   // and renders the game's extra feautures
   memoryGame.renderUtilities = function() {
-    this.$board.append(this.utilitiesElem);
-    this.$gameUtilities = $('#utilities');
     this.renderButton();
     this.renderTimer();
     this.renderMoveCounter();

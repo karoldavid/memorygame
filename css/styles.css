@@ -3,39 +3,100 @@ html {
 }
 
 body {
-	min-width: 320px;
+	min-width: 360px;
+}
+
+h1 {
+	margin-left: 10px;
 }
 
 .card-panel {
-	width: 180px;
-	height: 180px;
+	width: 150px;
+	height: 150px;
+	display: inline-block;
+	margin: 10px;
 }
 
 .material-icons {
 	margin: 0 auto;
 }
 
+.utilities {
+	display: inline-block;
+	margin-left: 10px;
+	padding: 0 50px;
+}
+
 .metrics {
 	display: inline-block;
 }
 
-.material-icons.md-36 { font-size: 36px; }
+.material-icons.md-36 {
+	font-size: 36px;
+}
 
-@media (max-width: 500px) {
+@media (max-width: 449px) {
+	.card-panel {
+		width: 60px;
+		height: 60px;
+	}
+	h1 {
+		font-size: 28px;
+	}
+}
+
+@media (min-width: 450px) and (max-width: 499px) {
 	.card-panel {
 		width: 80px;
 		height: 80px;
 	}
+	h1 {
+		font-size: 36px;
+	}
 }
 
-@media (min-width: 501px) and (max-width: 750px) {
+@media (min-width: 500px) and (max-width: 579px) {
+	.card-panel {
+		width: 90px;
+		height: 90px;
+	}
+	h1 {
+		font-size: 36px;
+	}
+}
+
+@media (min-width: 580px) and (max-width: 679px) {
+	.card-panel {
+		width: 100px;
+		height: 100px;
+	}
+	h1 {
+		font-size: 36px;
+	}
+}
+
+@media (min-width: 680px) and (max-width: 750px) {
 	.card-panel {
 		width: 120px;
 		height: 120px;
 	}
+	h1 {
+		font-size: 46px;
+	}
+
+	.utilities {
+		padding: 0 30px;
+	}
 }
 
-@media (min-width: 751px) and (max-width: 1100px) {
+@media (min-width: 751px) and (max-width: 849px) {
+	.card-panel {
+		width: 130px;
+		height: 130px;
+	}
+ }
+
+@media (min-width: 850px) and (max-width: 1100px) {
 	.card-panel {
 		width: 150px;
 		height: 150px;
